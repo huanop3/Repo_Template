@@ -1,0 +1,70 @@
+@page "/cart"
+@inject HttpClient Http
+@inject CartService cartService // Inject state management service nếu cần
+@inject Blazored.LocalStorage.ILocalStorageService localStorage;
+<div class="container">
+    <h3>Giỏ hàng</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Img</th>
+                <th>Quantity</th>
+                <th>Seller</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(CartItem item in cartService.cart.items){
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Title</td>
+                    <td><img src="https://i.pravatar.cc?u=@item.Id" alt="@item.Title" width="50" /></td>
+                    <td>
+                        <button class="btn btn-primary mx-2">+</button>
+                        @item.Quantity
+                        <button class="btn btn-primary mx-2">-</button>
+                    </td>
+                    <td>@item.Seller</td>
+                    <td>
+                        <button class="btn btn-danger">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td rowspan="5" align="right">
+                    Tổng tiền: @cartService.cart.items.Sum(n=> n.StartingPrice * n.Quantity).ToString("N0")
+                </td>
+                <td>
+                    <button class="btn btn-success">Order </button>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+
+@code {
+    public async Task HandleOrder () {
+        //Gọi api 
+
+    }
+    protected override async Task OnInitializedAsync()
+    {
+
+        // Nếu có dùng state service:
+        cartService.OnChange += StateHasChanged;
+    }
+
+
+    public void Dispose()
+    {
+        // Cleanup nếu cần
+         cartService.OnChange -= StateHasChanged;
+    }
+}
+
+

@@ -1,0 +1,62 @@
+@page "/"
+@using web_api_base.Service_FE.ViewModel
+
+@inject HttpClient Http
+@inject ProductStateService prodService
+@inject CartService cartService
+@{
+    
+
+}
+
+<div class="container">
+    <h1>Trang chủ</h1>
+    <p class="text-center">Danh sách sản phẩm </p>
+    @foreach (ListingVM item in prodService.productListing)
+    {
+        <div class="row bg-dark mt-2 text-white p-2">
+            <div class="col-2">
+                <div class="card">
+                    <img src="https://i.pravatar.cc?u=@item.Id" alt="@item.Title" />
+                </div>
+            </div>
+            <div class="col-10">
+                <h3 class="card-title">@item.Title</h3>
+                <p class="card-text">@item.Description</p>
+                <p class="card-text">@item.StartingPrice</p>
+                <div class="text-end">
+                    <h3>Người bán : @item.Seller</h3>
+                    <button class="btn btn-primary" @onclick="() => handleOrder(item)">Đặt hàng</button>
+                </div>
+            </div>
+        </div>
+    }
+
+
+</div>
+
+@code {
+    public async Task handleOrder (ListingVM item) {
+        CartItem cartItem = new CartItem() {
+            Id = item.Id,
+            Title = item.Title,
+            Quantity = 1,
+            Seller = item.Seller
+        };
+        // Thêm sản phẩm vào giỏ hàng
+        cartService.AddToCart(cartItem);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        // Gọi API ở đây nếu cần
+        await prodService.getProductListing();
+        // Nếu có dùng state service:
+        prodService.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        // Cleanup nếu cần
+        prodService.OnChange -= StateHasChanged;
+    }
+}
