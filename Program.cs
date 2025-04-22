@@ -133,6 +133,10 @@ builder.Services.AddCors(option =>
 //DI Service cho Blazor Server
 builder.Services.AddScoped<ProductStateService>();
 builder.Services.AddScoped<CartService>();
+//deploy cài đặt lắng nghe pport 80
+// builder.WebHost.UseUrls("http://*:80");
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -157,7 +161,7 @@ app.UseAuthorization();
 
 app.MapBlazorHub(); // SignalR hub cho Blazor Server
 app.MapFallbackToPage("/_Host"); // Trang mặc định cho Blazor
-
+// app.Urls.Add("http://*:80");
 app.Run();
 
 

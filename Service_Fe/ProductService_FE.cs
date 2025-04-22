@@ -20,7 +20,7 @@ public class ProductStateService(HttpClient http)
         var result = await http.GetFromJsonAsync<HTTPResponseClient<IEnumerable<ListingVM>>>("http://localhost:5208/api/Product/GetAllProductListing");
         productListing = result.Data;
 
-        Console.WriteLine($"{JsonSerializer.Serialize(result.Data)}");
+        // Console.WriteLine($"{JsonSerializer.Serialize(result.Data)}");
 
         NotifyStateChanged();
     }

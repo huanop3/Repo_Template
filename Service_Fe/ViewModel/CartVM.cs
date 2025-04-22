@@ -1,12 +1,15 @@
 public class Cart
 {
-    public List<CartItem> items =  new List<CartItem>();
 
-    public void AddToCart(CartItem newItem){
+    public List<CartItem> items = new List<CartItem>();
+
+    public void AddToCart(CartItem newItem)
+    {
         CartItem? item = items.Find(n => n.Id == newItem.Id);
         if (item != null)
         {
             item.Quantity += 1;
+
         }
         else
         {
@@ -14,17 +17,20 @@ public class Cart
 
         }
     }
-    public void DeleteItem(int id){
+    public void DeleteItem(int id)
+    {
         items = items.Where(x => x.Id != id).ToList();
     }
-    public void UpdateItem(int id, int quantity){
+    public void UpdateItem(int id, int quantity)
+    {
         CartItem? item = items.Find(x => x.Id == id);
         if (item != null)
         {
             item.Quantity = quantity;
         }
     }
-    public void UpdateItemCartButton(int id, int quantity){
+    public void UpdateItemCartButton(int id, int quantity)
+    {
         CartItem? item = items.Find(x => x.Id == id);
         if (item != null)
         {
@@ -43,5 +49,5 @@ public class CartItem
     public decimal StartingPrice { get; set; }
 
     public string? Seller { get; set; }
-    public decimal Quantity {get;set;}
+    public decimal Quantity { get; set; }
 }

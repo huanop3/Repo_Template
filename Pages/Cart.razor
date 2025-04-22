@@ -36,10 +36,13 @@
         <tfoot>
             <tr>
                 <td rowspan="5" align="right">
-                    Tổng tiền: @cartService.cart.items.Sum(n=> n.StartingPrice * n.Quantity).ToString("N0")
+                    @{
+                        var total = cartService.cart.items.Sum(n => n.StartingPrice * n.Quantity);
+                        <span>Tổng tiền: @total.ToString("N0")</span>
+                    }
                 </td>
                 <td>
-                    <button class="btn btn-success">Order </button>
+                    <button class="btn btn-success" @onclick="HandleOrder">Order</button>
                 </td>
             </tr>
         </tfoot>
