@@ -25,7 +25,7 @@ COPY --from=build /app .
 
 # Uncomment các biến môi trường và port
 # ENV ASPNETCORE_URLS=http://+:80
-# EXPOSE 80
+EXPOSE 80
 
 # Lệnh chạy app khi container start
 ENTRYPOINT ["dotnet", "web_api_base.dll"]

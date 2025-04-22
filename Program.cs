@@ -69,29 +69,29 @@ var Issuer = builder.Configuration["jwt:Issuer"];
 var Audience = builder.Configuration["jwt:Audience"];
 // Thêm dịch vụ Authentication vào ứng dụng, sử dụng JWT Bearer làm phương thức xác thực
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-{        
-        // Thiết lập các tham số xác thực token
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            // Kiểm tra và xác nhận Issuer (nguồn phát hành token)
-            ValidateIssuer = true, 
-            ValidIssuer = Issuer, // Biến `Issuer` chứa giá trị của Issuer hợp lệ
-            // Kiểm tra và xác nhận Audience (đối tượng nhận token)
-            ValidateAudience = true,
-            ValidAudience = Audience, // Biến `Audience` chứa giá trị của Audience hợp lệ
-            // Kiểm tra và xác nhận khóa bí mật được sử dụng để ký token
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(privateKey)), 
-            // Sử dụng khóa bí mật (`privateKey`) để tạo SymmetricSecurityKey nhằm xác thực chữ ký của token
-            // Giảm độ trễ (skew time) của token xuống 0, đảm bảo token hết hạn chính xác
-            ClockSkew = TimeSpan.Zero, 
-            // Xác định claim chứa vai trò của user (để phân quyền)
-            RoleClaimType = ClaimTypes.Role, 
-            // Xác định claim chứa tên của user
-            NameClaimType = ClaimTypes.Name, 
-            // Kiểm tra thời gian hết hạn của token, không cho phép sử dụng token hết hạn
-            ValidateLifetime = true
-        };
+{
+    // Thiết lập các tham số xác thực token
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        // Kiểm tra và xác nhận Issuer (nguồn phát hành token)
+        ValidateIssuer = true,
+        ValidIssuer = Issuer, // Biến `Issuer` chứa giá trị của Issuer hợp lệ
+                              // Kiểm tra và xác nhận Audience (đối tượng nhận token)
+        ValidateAudience = true,
+        ValidAudience = Audience, // Biến `Audience` chứa giá trị của Audience hợp lệ
+                                  // Kiểm tra và xác nhận khóa bí mật được sử dụng để ký token
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(privateKey)),
+        // Sử dụng khóa bí mật (`privateKey`) để tạo SymmetricSecurityKey nhằm xác thực chữ ký của token
+        // Giảm độ trễ (skew time) của token xuống 0, đảm bảo token hết hạn chính xác
+        ClockSkew = TimeSpan.Zero,
+        // Xác định claim chứa vai trò của user (để phân quyền)
+        RoleClaimType = ClaimTypes.Role,
+        // Xác định claim chứa tên của user
+        NameClaimType = ClaimTypes.Name,
+        // Kiểm tra thời gian hết hạn của token, không cho phép sử dụng token hết hạn
+        ValidateLifetime = true
+    };
 });
 //DI Service JWT
 builder.Services.AddScoped<JwtAuthService>();
@@ -102,50 +102,48 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddScoped<IUserRoleRepository, UserRoleRepository>();
-builder.Services.AddScoped<IProductRepository,ProductRepository>();
-builder.Services.AddScoped<IProductImageRepository,ProductImageRepository>();
-builder.Services.AddScoped<IOrderRepository,OrderRepository>();
-builder.Services.AddScoped<IOrderDetailRepository,OrderDetailRepository>();
-builder.Services.AddScoped<IListingRepository,ListingRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+builder.Services.AddScoped<IListingRepository, ListingRepository>();
 //DI UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //DI Service
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IProductService,ProductService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddHttpClient();
 //Add storeage
 builder.Services.AddBlazoredLocalStorage();
 //Sử dụng httpcontext từ blazor server
 builder.Services.AddHttpContextAccessor();
 //Cấu hình CORS
-builder.Services.AddCors(option =>
-{
-    option.AddPolicy("allow_origin", policy =>
-    {
-        // policy.AllowAnyOrigin(); //Cho phép tất cả các client đều có thể gửi dữ liệu đến server
-        policy.WithOrigins("https://localhost:5208", "https://login.cybersoft.edu.vn", "http://127.0.0.1:9999")
-            .AllowAnyHeader() //Cho phép rq tất cả header
-            .AllowAnyMethod() //Cho phép rq tất cả method (POST,PUT,GET,DELETE,OPTION)
-            .AllowCredentials(); ////Cho phép cookie...
-    });
-    // option.AddDefaultPolicy();
-});
+// builder.Services.AddCors(option =>
+// {
+//     option.AddPolicy("allow_origin", policy =>
+//     {
+//         // WithOrigins("https://localhost:5208", "https://login.cybersoft.edu.vn", "http://127.0.0.1:9999")
+//         // policy.AllowAnyOrigin(); //Cho phép tất cả các client đều có thể gửi dữ liệu đến server
+//         policy.AllowAnyHeader() //Cho phép rq tất cả header
+//             .AllowAnyMethod() //Cho phép rq tất cả method (POST,PUT,GET,DELETE,OPTION)
+//             .AllowCredentials(); ////Cho phép cookie...
+//     });
+//     // option.AddDefaultPolicy();
+// });
 //DI Service cho Blazor Server
 builder.Services.AddScoped<ProductStateService>();
 builder.Services.AddScoped<CartService>();
 //deploy cài đặt lắng nghe pport 80
-// builder.WebHost.UseUrls("http://*:80");
+builder.WebHost.UseUrls("http://*:80");
 
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-app.UseCors("allow_origin"); //Sử dụng cors cho tất cả các request từ client đến server
+
+app.UseSwagger();
+app.UseSwaggerUI();
+// app.UseCors("allow_origin"); //Sử dụng cors cho tất cả các request từ client đến server
 app.UseHttpsRedirection();
 app.MapControllers();
 
@@ -161,7 +159,7 @@ app.UseAuthorization();
 
 app.MapBlazorHub(); // SignalR hub cho Blazor Server
 app.MapFallbackToPage("/_Host"); // Trang mặc định cho Blazor
-// app.Urls.Add("http://*:80");
+app.Urls.Add("http://*:80");
 app.Run();
 
 
