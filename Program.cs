@@ -118,18 +118,18 @@ builder.Services.AddBlazoredLocalStorage();
 //Sử dụng httpcontext từ blazor server
 builder.Services.AddHttpContextAccessor();
 //Cấu hình CORS
-// builder.Services.AddCors(option =>
-// {
-//     option.AddPolicy("allow_origin", policy =>
-//     {
-//         // WithOrigins("https://localhost:5208", "https://login.cybersoft.edu.vn", "http://127.0.0.1:9999")
-//         // policy.AllowAnyOrigin(); //Cho phép tất cả các client đều có thể gửi dữ liệu đến server
-//         policy.AllowAnyHeader() //Cho phép rq tất cả header
-//             .AllowAnyMethod() //Cho phép rq tất cả method (POST,PUT,GET,DELETE,OPTION)
-//             .AllowCredentials(); ////Cho phép cookie...
-//     });
-//     // option.AddDefaultPolicy();
-// });
+builder.Services.AddCors(option =>
+{
+    option.AddPolicy("allow_origin", policy =>
+    {
+        // WithOrigins("https://localhost:5208", "https://login.cybersoft.edu.vn", "http://127.0.0.1:9999")
+        // policy.AllowAnyOrigin(); //Cho phép tất cả các client đều có thể gửi dữ liệu đến server
+        policy.AllowAnyOrigin().AllowAnyHeader() //Cho phép rq tất cả header
+            .AllowAnyMethod() //Cho phép rq tất cả method (POST,PUT,GET,DELETE,OPTION)
+            .AllowCredentials(); ////Cho phép cookie...
+    });
+    // option.AddDefaultPolicy();
+});
 //DI Service cho Blazor Server
 builder.Services.AddScoped<ProductStateService>();
 builder.Services.AddScoped<CartService>();
